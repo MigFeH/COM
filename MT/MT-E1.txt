@@ -1,0 +1,84 @@
+//////////////////////
+// turing: Indicar aqui la funcion a computar
+//////////////////////
+
+name: MT-E1-c
+init: q0
+accept: qf
+
+// NOTAS SIMULADOR
+// Ejemplo de entrada al simulador para una funcion de aridad 2 con x=2 e y=1: 111_11
+// El 0 de la Teoria en el simulador se trata con _
+// D >
+// I <
+// N -
+// No hay H, 
+// 	Retorna resultado cuando termina en el estado definido como aceptacion, en este caso qf
+// 	Si para en otro estado no se considera que retorna resultado, indeterminacion.
+// Definicion de las transiciones
+// La transicion (q0,1,0,D,q1) -->  q0 lee un 1, lo cambia por un 0, se mueve a la derecha y pasa a q1 
+// En el simulador seria
+// 	q0,1
+// 	q1,_,>
+
+// Borro el 1 de la codificación de entrada de x
+q0,1
+q1,_,>
+
+// Me salto un 1, pues quiero copiar todos los 1's de bloque menos 1 (x-1)
+q1,1
+q2,1,>
+
+// Marco un 1 para copiarlo
+q2,1
+q3,_,>
+
+
+// Vamos al cero a la derecha para dejar un separador antes de copiar
+q3,1
+q3,1,>
+
+
+// Dejamos un separador
+q3,_
+q4,_,>
+
+
+// Saltamos los 1's copiados previamente (si los hay)
+q4,1
+q4,1,>
+
+// Copio el 1
+q4,_
+q5,1,<
+
+// Vuelvo al separador
+q5,1
+q5,1,<
+
+// Salto el separador
+q5,_
+q6,_,<
+
+// Vuelvo a la marca
+q6,1
+q6,1,<
+
+// Encuentro la marca, desmarco y marco el siguiente para repetir el proceso
+q6,_
+q2,1,>
+
+
+// Transiciones de fin ---------------
+// Si voy a marcar un 1 para copiarlo (estado q2) y no hay 1, es que he 
+// terminado de copiar un bloque de 1's
+
+// Voy al siguiente bloque de 1's para repetir el proceso
+// Paso al estado en el que me salto un 1
+q2,_
+q1,_,>
+
+// He terminado de hacer el sumatorio, cuando voy a saltar un 1 y no lo hay
+q1,_
+qf,_,-
+ 
